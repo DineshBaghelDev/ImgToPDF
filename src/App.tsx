@@ -17,7 +17,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { XIcon } from "lucide-react"
+import { EyeIcon, XIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -296,6 +296,26 @@ function SortableItem({ item, index, onRemove }: { item: Item; index: number; on
         <Badge className="absolute top-1.5 left-1.5 h-6 min-w-6 text-sm font-semibold shadow-md" aria-hidden>
           {index + 1}
         </Badge>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-1 right-9 size-7"
+              aria-label={`Preview ${item.file.name}`}
+            >
+              <EyeIcon />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-4xl">
+            <DialogHeader>
+              <DialogTitle className="truncate pr-6">
+                Page {index + 1}: {item.file.name}
+              </DialogTitle>
+            </DialogHeader>
+            <img src={item.url} alt={item.file.name} className="max-h-[75vh] w-full object-contain" />
+          </DialogContent>
+        </Dialog>
         <Button
           size="icon"
           variant="secondary"
