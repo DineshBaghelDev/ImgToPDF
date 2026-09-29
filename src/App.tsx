@@ -19,8 +19,10 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { XIcon } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -212,11 +214,24 @@ export function App() {
               {busy ? "Generating…" : "Done"}
             </Button>
             {pdfUrl && (
-              <Button asChild variant="secondary">
-                <a href={pdfUrl} download="images.pdf">
-                  Download PDF
-                </a>
-              </Button>
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline">Preview</Button>
+                  </DialogTrigger>
+                  <DialogContent className="flex h-[90vh] flex-col sm:max-w-4xl">
+                    <DialogHeader>
+                      <DialogTitle>PDF preview</DialogTitle>
+                    </DialogHeader>
+                    <iframe src={pdfUrl} title="PDF preview" className="w-full flex-1 rounded-md border" />
+                  </DialogContent>
+                </Dialog>
+                <Button asChild variant="secondary">
+                  <a href={pdfUrl} download="images.pdf">
+                    Download PDF
+                  </a>
+                </Button>
+              </>
             )}
             {items.length > 0 && (
               <Button variant="ghost" onClick={clear}>
@@ -276,10 +291,11 @@ function SortableItem({ item, index, onRemove }: { item: Item; index: number; on
           className="cursor-grab touch-none outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <img src={item.url} alt="" className="aspect-square w-full bg-muted object-contain" />
-          <p className="truncate px-2 py-1 text-xs">
-            {index + 1}. {item.file.name}
-          </p>
+          <p className="truncate px-2 py-1 text-xs">{item.file.name}</p>
         </div>
+        <Badge className="absolute top-1.5 left-1.5 h-6 min-w-6 text-sm font-semibold shadow-md" aria-hidden>
+          {index + 1}
+        </Badge>
         <Button
           size="icon"
           variant="secondary"
